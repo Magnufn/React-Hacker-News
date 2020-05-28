@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ListItem from "./listItem";
 
-const API = 'https://hacker-news.firebaseio.com/v0/newstories.json';
+const API = 'https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty';
 const QUERY = 'https://hacker-news.firebaseio.com/v0/item/';
 
 class Newest extends Component {
@@ -37,9 +37,10 @@ class Newest extends Component {
     //await is bad practise in loops and usually does not work
     let requests = [];
     let responses = [];
+    console.log(ids)
 
     for (let id in ids)
-        requests.push(fetch(QUERY + id + '.json')
+        requests.push(fetch(QUERY + id + '.json?print=pretty')
             //Add response to array
             .then(response => response.json())
             .then(data => responses.push(data))
