@@ -13,7 +13,6 @@ class ListItem extends Component {
     };*/
 
   handleTimestamp = (time) => {
-    console.log(moment(time).fromNow());
     return moment(time).fromNow();
   };
 
@@ -39,7 +38,7 @@ class ListItem extends Component {
           </a>
           )
           <br />
-          {this.props.item.points} points by {this.props.item.author}{" "}
+          {(this.props.item.score ? this.props.item.score : this.props.item.points)} points by {this.props.item.author}{" "}
           {this.handleTimestamp(this.props.item.created_at ? this.props.item.created_at : this.props.item.time*1000)} |{" "}
           <button
             style={buttonStyle}

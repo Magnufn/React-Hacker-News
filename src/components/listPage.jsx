@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import ListItem from "./listItem";
 
-const API = 'https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty';
+
 const QUERY = 'https://hacker-news.firebaseio.com/v0/item/';
 
-class Newest extends Component {
+class ListPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,13 +15,29 @@ class Newest extends Component {
     this.handleHide = this.handleHide.bind(this);
   }
 
-  componentDidMount() {
+  getData = () => {
+    console.log(this.props.apiurl)
+
     this.setState({ isLoading: true });
 
-    fetch(API)
+    fetch(this.props.apiurl)
       .then(response => response.json())
       .then(data => this.getByIds(data))
+      .then(data => {
+        console.log(data)
+        return data;
+      })
+      //.then(data => data.sort((a, b) => a.id > b.id ? -1 : 1))
       .then(items => this.setState({items: items}));
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props){
+      this.getData();
+    }
   }
 
   handleHide = (key) => {
@@ -37,19 +53,25 @@ class Newest extends Component {
     //await is bad practise in loops and usually does not work
     let requests = [];
     let responses = [];
-    console.log(ids)
+    //console.log(ids)
 
-    for (let id in ids)
-        requests.push(fetch(QUERY + id + '.json?print=pretty')
+    for (let i = 0; i < 20; i++)
+        requests.push(fetch(QUERY + ids[i] + '.json?print=pretty')
             //Add response to array
             .then(response => response.json())
-            .then(data => responses.push(data))
+            .then(data => {
+              if(data !== null){
+                //console.log("id: ", id, " data: ", data)
+                responses.push(data)
+              }
+            })
             .catch(err => console.log(err)));
 
     //Await all requests
     await Promise.all(requests);
     this.setState({isLoading: false});
     //return all responses
+    //console.log(responses);
     return responses;
 }
   styles = {
@@ -75,4 +97,4 @@ class Newest extends Component {
   }
 }
 
-export default Newest;
+export default ListPage;

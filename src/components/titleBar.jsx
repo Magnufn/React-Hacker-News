@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import logo from "../img/y18.png";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Newest from "./newest";
+import ListPage from "./listPage";
 import List from "./list";
 
 class TitleBar extends Component {
@@ -37,6 +37,7 @@ class TitleBar extends Component {
             Welcome
           </Link>{" "}
           |<Link to="/newest" style={textStyle}>New</Link> |
+          <Link to="/top" style={textStyle}>Top</Link> |
           <a style={textStyle} href="http://google.com">
             Threads
           </a>{" "}
@@ -70,7 +71,10 @@ class TitleBar extends Component {
             <List />
           </Route>
           <Route path="/newest">
-            <Newest />
+            <ListPage apiurl="https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty" />
+          </Route>
+          <Route path="/top">
+            <ListPage apiurl="https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty" />
           </Route>
         </Switch>
       </Router>
